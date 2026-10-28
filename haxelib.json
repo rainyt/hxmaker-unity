@@ -1,0 +1,22 @@
+{
+  "name": "hxmaker-unity",
+  "url": "",
+  "license": "MIT",
+  "tags": [
+    "game",
+    "unity",
+    "cs"
+  ],
+  "description": "hxmaker 的 Unity 二维渲染后端，支持多纹理合批和多摄像机宿主集成。",
+  "version": "0.1.0",
+  "releasenote": "Unity 后端首版源码，尚未进行编译与运行验证。",
+  "contributors": [
+    "rainy"
+  ],
+  "classPath": "src",
+  "dependencies": {
+    "hxmaker": "",
+    "actuate": "",
+    "vector-math": ""
+  }
+}

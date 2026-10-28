@@ -1,0 +1,10 @@
+{
+  "name": "com.rainyt.hxmaker.urp",
+  "version": "0.1.0",
+  "displayName": "Hxmaker URP",
+  "description": "hxmaker 的可选 URP 渲染通道，覆盖 URP 14 与 Unity 6 Render Graph 路径。",
+  "unity": "2022.3",
+  "dependencies": {
+    "com.rainyt.hxmaker": "0.1.0"
+  }
+}

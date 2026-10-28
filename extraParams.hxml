@@ -1,0 +1,5 @@
+-D hxmaker_unity
+-D no-compilation
+-D actuate_manual_update
+-D actuate_manual_time
+--macro hx.unity.Build.configure()

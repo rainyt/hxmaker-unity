@@ -1,0 +1,7 @@
+{
+  "name": "com.rainyt.hxmaker",
+  "version": "0.1.0",
+  "displayName": "Hxmaker Unity",
+  "description": "hxmaker 的 Unity 宿主、多纹理批处理与资源运行时。",
+  "unity": "2022.3"
+}

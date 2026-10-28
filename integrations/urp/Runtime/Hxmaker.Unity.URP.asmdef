@@ -1,0 +1,10 @@
+{
+  "name": "Hxmaker.Unity.URP",
+  "rootNamespace": "Hxmaker.Unity.URP",
+  "references": [
+    "Hxmaker.Unity",
+    "Unity.RenderPipelines.Universal.Runtime",
+    "Unity.RenderPipelines.Core.Runtime"
+  ],
+  "autoReferenced": true
+}

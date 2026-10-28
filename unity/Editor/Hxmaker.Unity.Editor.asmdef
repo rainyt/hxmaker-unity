@@ -1,0 +1,10 @@
+{
+  "name": "Hxmaker.Unity.Editor",
+  "references": [
+    "Hxmaker.Unity"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "autoReferenced": true
+}
