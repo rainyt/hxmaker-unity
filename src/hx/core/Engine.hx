@@ -32,7 +32,7 @@ class Engine extends EventDispatcher implements IEngine {
 	private var fps:Int = -1;
 	private var disposed:Bool = false;
 	private var elapsed:Float = 0;
-	public function new() {}
+	public function new() { super(); }
 	public function init(stageWidth:Int, stageHeight:Int, lockLandscape:Bool = false):Void {
 		if (UnityRuntime.engine != null) throw "Unity 宿主已有活动引擎";
 		if (lockLandscape) throw "Unity 屏幕方向请在 Player Settings 中配置，首版不支持 lockLandscape";

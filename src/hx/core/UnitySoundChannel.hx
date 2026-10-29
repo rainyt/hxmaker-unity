@@ -8,7 +8,7 @@ import hx.unity.NativeBridge;
 class UnitySoundChannel extends EventDispatcher implements ISoundChannel {
 	private static var channels:Array<UnitySoundChannel> = [];
 	private var handle:Int;
-	public function new(handle:Int) { this.handle = handle; channels.push(this); }
+	public function new(handle:Int) { super(); this.handle = handle; channels.push(this); }
 	public function stop():Void {
 		if (handle == 0) return;
 		NativeBridge.stopSound(handle); handle = 0; channels.remove(this);

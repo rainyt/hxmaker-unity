@@ -24,7 +24,7 @@ def export(generated: Path, project: Path, main: str) -> None:
         files["Haxe/" + path.relative_to(source).as_posix()] = path.read_bytes()
     if not files:
         raise SystemExit("Haxe 输出目录中没有 C# 源码，请先执行 Haxe 构建")
-    native_main: str = main if "." in main else "haxe.root." + main
+    native_main: str = main
     files["HxmakerGame.cs"] = ("""using Hxmaker.Unity;
 using UnityEngine.Scripting;
 

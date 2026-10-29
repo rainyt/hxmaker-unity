@@ -2,7 +2,7 @@
 
 hxmaker 的 Unity Haxelib 后端。Haxe 编译为 C#，Unity 承担窗口、主循环、摄像机、设备与资源 API；hxmaker 保留显示树、布局和业务代码。
 
-当前为首版源码实现，尚未运行 Haxe 编译、Unity 导入、画面或发布验证。不能据此视为已通过验收的发行版本。
+当前为首版实现。Haxe 4.3.7 的 C# 生成与 Unity 2022.3.62f3c1 临时示例的导入编译已通过；场景已同步到 `samples/basic/UnityProject`。运行、画面和发布验证尚未完成。
 
 ## 首版范围
 
@@ -20,7 +20,7 @@ hxmaker 的 Unity Haxelib 后端。Haxe 编译为 C#，Unity 承担窗口、主�
 | 音频与存储 | AudioSource 播放与完成事件；PlayerPrefs 保存 JSON 值 |
 | Unity 共存 | 内置管线命令缓冲；可选 URP 通道；相机分屏与目标 RenderTexture |
 
-这里的能力表描述代码覆盖范围，实际兼容性与性能仍待验证。
+这里的能力表描述代码覆盖范围，运行兼容性与性能仍待验证。
 
 ## 安装
 
@@ -40,12 +40,23 @@ haxelib install hxcs
 "com.rainyt.hxmaker": "file:/Users/rainy/Documents/Github/hxmaker-unity/unity"
 ```
 
-从 `samples/basic` 目录运行：
+本机可直接用 Unity Hub 打开 `samples/basic/UnityProject`，再打开 `Assets/Scenes/Main.unity` 进入播放模式。详细步骤参见 [示例说明](samples/basic/README.md)。
+
+修改 Haxe 源码后，从 `samples/basic` 目录运行：
 
 ```sh
-haxe build.hxml
-python3 ../../tools/export_unity.py --generated build --project /你的/Unity项目 --main Main
+python3 build.py
 ```
+
+创建自己的工程可使用：
+
+```sh
+haxelib run hxmaker create unity MyGame
+cd MyGame
+python3 build.py
+```
+
+若已配置 `hxmaker` 包装命令，也可使用 `hxmaker create unity MyGame`；构建命令为 `hxmaker build unity`。新工程首次导入后，在 Unity 菜单选择“Tools → Hxmaker → 创建默认场景”。
 
 导出工具仅写入 `Assets/HxmakerGenerated`，并维护自己的文件清单；不会把 Haxe 构建命令嵌入 Unity 编辑器回调。入口 `main()` 必须公开。生成程序集通过 `link.xml` 保留动态 UI 所需的成员。
 
@@ -83,11 +94,11 @@ image.filters = [new hx.filters.BlurFilter()];
 
 复杂文字整形、双向文字、emoji 组合序列、精确复刻 OpenFL 排版、容器 ADD 的离屏分组合成语义暂不保证。容器 ADD 在首版将加法状态传给后代，重叠对象不会先组成透明度组。颜色和透明边缘需在所选 Unity 色彩空间下验收。
 
-## 待用户安排的验证
+## 验证状态
 
-遵守项目约定，本次不自动运行编译或测试。后续应依次确认：
+已通过 Haxe C# 生成、Unity 2022.3.62f3c1 临时示例导入编译、默认场景生成，以及 CLI 的 Unity／OpenFL 工程创建检查。仍有 Haxe 生成器和 Actuate 的非阻断警告。示例同步后的首次导入和播放测试由用户手动完成；本次没有自动进入播放模式。后续应确认：
 
-1. Haxe C# 生成、Unity 内置管线导入、URP 14 与 URP 17 两条路径。
+1. 实际示例的播放画面，以及尚未验证的 URP 14／URP 17 两条路径。
 2. 超过 8 张纹理自动拆批，关闭多纹理后画面一致；平滑／像素风混用、NORMAL／ADD。
 3. 中文字体重排、文本尺寸、范围颜色、换行、描边；列表、九宫格、平铺、嵌套裁剪。
 4. 两台摄像机、分屏、目标纹理、指针拖出视口、焦点丢失、触摸和键盘 Tab。

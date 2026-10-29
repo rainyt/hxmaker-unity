@@ -22,7 +22,14 @@ namespace Hxmaker.Unity
             if (fonts.TryGetValue(key, out Font font)) return font;
             if (string.IsNullOrEmpty(key))
             {
-                font = Host.DefaultFont != null ? Host.DefaultFont : Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+                font = Host.DefaultFont;
+                if (font == null)
+                {
+                    // 编辑器示例可使用系统中文字体，发布工程仍应显式配置自己的字体资源。
+                    font = Font.CreateDynamicFontFromOSFont(new string[] { "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Arial" }, 16);
+                    if (font != null) ownedFonts.Add(font);
+                    else font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+                }
             }
             else
             {

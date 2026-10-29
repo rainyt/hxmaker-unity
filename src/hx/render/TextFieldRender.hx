@@ -56,13 +56,19 @@ class TextFieldRender {
 		}
 	}
 	private static function drawGlyph(label:Label, renderer:Render, glyph:hx.text.UnityTextLayout.TextGlyph, dx:Float, dy:Float, color:Int):Void {
-		var transform:ColorTransform = new ColorTransform(((color >> 16) & 255) / 255, ((color >> 8) & 255) / 255, (color & 255) / 255, 1);
+		var red:Float = (color >> 16) & 255;
+		var green:Float = (color >> 8) & 255;
+		var blue:Float = color & 255;
+		// 动态字库只提供字形透明度，RGB 由文本颜色决定。
+		// 乘数归零、偏移写入颜色，使 Metal 等后端的字库 RGB 不影响结果。
+		var transform:ColorTransform = new ColorTransform(0, 0, 0, 1, red, green, blue, 0);
 		if (label.__colorTransform != null) {
 			var source:ColorTransform = label.__colorTransform;
-			transform.redMultiplier *= source.redMultiplier; transform.greenMultiplier *= source.greenMultiplier;
-			transform.blueMultiplier *= source.blueMultiplier; transform.alphaMultiplier = source.alphaMultiplier;
-			transform.redOffset = source.redOffset; transform.greenOffset = source.greenOffset;
-			transform.blueOffset = source.blueOffset; transform.alphaOffset = source.alphaOffset;
+			transform.redOffset = red * source.redMultiplier + source.redOffset;
+			transform.greenOffset = green * source.greenMultiplier + source.greenOffset;
+			transform.blueOffset = blue * source.blueMultiplier + source.blueOffset;
+			transform.alphaMultiplier = source.alphaMultiplier;
+			transform.alphaOffset = source.alphaOffset;
 		}
 		var x:Float = glyph.x + dx; var y:Float = glyph.y + dy;
 		renderer.emit([x, y, x + glyph.width, y, x, y + glyph.height, x + glyph.width, y + glyph.height], [0, 1, 2, 1, 3, 2], glyph.uvs,

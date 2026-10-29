@@ -14,6 +14,9 @@ namespace Hxmaker.Unity
         private static int nextTexture = 1;
         private static int slots = 8;
         internal static HxmakerHost Host;
+        public static int FrameSerial { get; private set; }
+        public static int CameraReplays { get; private set; }
+        public static int BatchCount(int surface = 0) { return surfaces.TryGetValue(surface, out Surface value) ? value.Used : 0; }
         public static int textureSlots() { return slots; }
         public static double pixelRatio() { return 1.0; }
         public static void targetFrameRate(int value) { Application.targetFrameRate = value; }
@@ -40,6 +43,7 @@ namespace Hxmaker.Unity
                 value = new Surface(); surfaces.Add(surface, value);
             }
             if (width <= 0 || height <= 0) throw new ArgumentOutOfRangeException("逻辑舞台尺寸必须大于零");
+            if (surface == 0) FrameSerial++;
             value.Width = (float)width; value.Height = (float)height; value.Used = 0;
         }
 
@@ -79,6 +83,7 @@ namespace Hxmaker.Unity
             foreach (HxmakerView view in HxmakerView.ForCamera(camera))
             {
                 if (!surfaces.TryGetValue(view.Surface, out Surface surface)) continue;
+                CameraReplays++;
                 Rect viewport = view.PixelViewport;
                 command.SetViewport(viewport);
                 foreach (Batch batch in surface.Batches)
@@ -165,7 +170,7 @@ namespace Hxmaker.Unity
         {
             Font.textureRebuilt -= OnFontRebuilt;
             foreach (Surface surface in surfaces.Values) foreach (Batch batch in surface.Batches) batch.Dispose();
-            surfaces.Clear();
+            surfaces.Clear(); FrameSerial = 0; CameraReplays = 0;
             foreach (TextureEntry entry in textures.Values) if (entry.Owned && entry.Texture != null) UnityEngine.Object.Destroy(entry.Texture);
             textures.Clear(); textureIds.Clear();
             DisposeRequests(); DisposeAudio(); DisposeFonts(); Host = null;

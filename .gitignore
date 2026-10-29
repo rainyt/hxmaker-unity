@@ -8,3 +8,8 @@ build/
 .DS_Store
 *.csproj
 *.sln
+
+# Unity 示例的生成源码与本地缓存
+/samples/basic/UnityProject/Assets/HxmakerGenerated/
+/samples/basic/UnityProject/Assets/HxmakerGenerated.meta
+__pycache__/
