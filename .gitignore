@@ -13,3 +13,7 @@ build/
 /samples/basic/UnityProject/Assets/HxmakerGenerated/
 /samples/basic/UnityProject/Assets/HxmakerGenerated.meta
 __pycache__/
+
+# 迁移示例的自动生成源码
+/samples/openfl-gallery/UnityProject/Assets/HxmakerGenerated/
+/samples/openfl-gallery/UnityProject/Assets/HxmakerGenerated.meta

@@ -42,6 +42,8 @@ haxelib install hxcs
 
 本机可直接用 Unity Hub 打开 `samples/basic/UnityProject`，再打开 `Assets/Scenes/Main.unity` 进入播放模式。详细步骤参见 [示例说明](samples/basic/README.md)。
 
+新增 [OpenFL 示例迁移版](samples/openfl-gallery/README.md)：在 `samples/openfl-gallery` 执行 `python3 build.py`，再打开其中的 `UnityProject`。该示例保留原资源、菜单、布局与 25 页可支持内容，跳过 OpenFL 原生对象、字体图集诊断以及 MULTIPLY/SCREEN；尚未进行 Unity 播放验收。
+
 修改 Haxe 源码后，从 `samples/basic` 目录运行：
 
 ```sh

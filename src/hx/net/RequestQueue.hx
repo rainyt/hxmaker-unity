@@ -54,12 +54,18 @@ class RequestQueue {
 			entry.request = 0;
 			var listeners:Array<Dynamic->FutureErrorEvent->Void> = entry.listeners;
 			entry.listeners = [];
-			var callbackFailure:Dynamic = null;
+			var callbackFailure:CallbackExceptionDispatchInfo = null;
 			for (listener in listeners) {
 				try { listener(entry.value, error); }
-				catch (failure:Dynamic) { if (callbackFailure == null) callbackFailure = failure; }
+				catch (failure:Dynamic) {
+					// 继续通知其他等待者，并保留首个异常发生处的原始堆栈。
+					if (callbackFailure == null) {
+						var nativeFailure:cs.system.Exception = cast haxe.Exception.caught(failure).native;
+						callbackFailure = CallbackExceptionDispatchInfo.Capture(nativeFailure);
+					}
+				}
 			}
-			if (callbackFailure != null) throw callbackFailure;
+			if (callbackFailure != null) callbackFailure.Throw();
 		}
 		hx.core.UnitySoundChannel.update();
 	}
@@ -71,8 +77,14 @@ class RequestQueue {
 		entries.set(name, {kind: 2, path: path, request: 0, refs: 0, value: bitmap, listeners: []});
 		return name;
 	}
-	public static function retain(path:String):Void { var entry:CacheEntry = entries.get(path); if (entry != null) entry.refs++; }
+	public static function retain(path:String):Void {
+		// 图集、JSON 和资源集合可没有独立缓存键；子资源仍由 AssetObject 递归保留。
+		if (path == null || path == "") return;
+		var entry:CacheEntry = entries.get(path);
+		if (entry != null) entry.refs++;
+	}
 	public static function release(path:String):Void {
+		if (path == null || path == "") return;
 		var entry:CacheEntry = entries.get(path);
 		if (entry != null && entry.refs > 0) entry.refs--;
 	}
@@ -102,4 +114,11 @@ private typedef CacheEntry = {
 	var refs:Int;
 	var value:Dynamic;
 	var listeners:Array<Dynamic->FutureErrorEvent->Void>;
+}
+
+/** 延后重新抛出回调异常时，保留 .NET 原始堆栈。 */
+@:native("System.Runtime.ExceptionServices.ExceptionDispatchInfo")
+private extern class CallbackExceptionDispatchInfo {
+	public static function Capture(exception:cs.system.Exception):CallbackExceptionDispatchInfo;
+	public function Throw():Void;
 }

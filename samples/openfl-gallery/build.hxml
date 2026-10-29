@@ -1,0 +1,8 @@
+--class-path Source
+--library hxmaker
+--library hxmaker-unity
+--library spine-haxe
+--main Main
+--cs build
+-D no-compilation
+-D ui_builder_path=UnityProject/Assets/StreamingAssets

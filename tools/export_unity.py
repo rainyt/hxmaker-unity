@@ -71,6 +71,11 @@ namespace Hxmaker.Unity.Generated
             meta: Path = Path(str(path) + ".meta")
             if meta.exists():
                 meta.unlink()
+    # 固定新工程入口的 GUID，让已保存的示例场景在重新生成后仍能找到脚本。
+    # 已有工程沿用 Unity 分配的 GUID，避免破坏原场景引用。
+    entry_meta: Path = destination / "HxmakerGame.cs.meta"
+    if not entry_meta.exists():
+        entry_meta.write_text("fileFormatVersion: 2\nguid: ced2a4fb16ec50a3b125e97bb42da068\nMonoImporter:\n  externalObjects: {}\n  serializedVersion: 2\n  defaultReferences: []\n  executionOrder: 0\n  icon: {instanceID: 0}\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n")
     manifest.write_text(json.dumps({"files": sorted(files)}, indent=2))
     print("已导出至 " + str(destination))
 

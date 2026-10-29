@@ -1,0 +1,87 @@
+package test;
+
+import hx.events.MouseEvent;
+import hx.particle.FourAttribute;
+import hx.particle.TweenAttribute;
+import hx.particle.RandomTwoAttribute;
+import hx.particle.OneAttribute;
+import hx.assets.Assets;
+import hx.ui.UIManager;
+import hx.display.Particle;
+import hx.display.Scene;
+import demo.SampleScene;
+
+class ParticleRender extends SampleScene {
+	override function onStageInit():Void {
+		super.onStageInit();
+		var assets:Assets = createAssets();
+		assets.loadBitmapData("assets/texture.png");
+		assets.loadBitmapData("assets/particle/yudi_da.png");
+		assets.loadJson("assets/particle/yudi_da.json");
+        assets.loadBitmapData("assets/particle/yudi_xiao.png");
+		assets.loadJson("assets/particle/yudi_xiao.json");
+        assets.loadBitmapData("assets/particle/yuhua.png");
+		assets.loadJson("assets/particle/yuhua.json");
+		assets.onComplete((a) -> {
+			// 下雨
+			var p:Particle = new Particle(assets.getObject("yudi_da"), assets.getBitmapData("yudi_da"));
+			this.addChild(p);
+			p.x = this.stage.stageWidth / 2;
+			p.start();
+
+			var p2:Particle = new Particle(assets.getObject("yudi_xiao"), assets.getBitmapData("yudi_xiao"));
+			this.addChild(p2);
+			p2.x = this.stage.stageWidth / 2;
+			p2.start();
+
+			// 创建一个粒子
+			var p:Particle = new Particle(null, assets.getBitmapData("texture"));
+			// 设置粒子数量
+			p.counts = 100;
+			// 设置发射点为动态
+			p.dynamicEmitPoint = true;
+			// 设置整个粒子的持续时间
+			p.duration = -1;
+			this.addChild(p);
+			// 设置粒子的初始位置
+			p.x = this.stage.stageWidth / 2;
+			p.y = this.stage.stageHeight / 2;
+			// 设置粒子的生成范围
+			p.widthRange = 30;
+			p.heightRange = 30;
+			// 设置粒子的旋转角度
+			p.rotaionAttribute.start = new OneAttribute(0);
+			p.rotaionAttribute.end = new RandomTwoAttribute(180, 360);
+			// 设置粒子的缩放系数
+			p.scaleXAttribute.start = new OneAttribute(1);
+			p.scaleXAttribute.end = new RandomTwoAttribute(3.5, 6);
+			p.scaleYAttribute.start = new OneAttribute(1);
+			p.scaleYAttribute.end = new RandomTwoAttribute(3.5, 6);
+			// 设置粒子的速度
+			p.velocity.x = new RandomTwoAttribute(-100, 100);
+			p.velocity.y = new RandomTwoAttribute(-100, 100);
+			// 设置粒子的重力
+			p.gravity.x = new OneAttribute(0);
+			p.gravity.y = new OneAttribute(500);
+			// 设置粒子的加速度
+			p.acceleration.x = new OneAttribute(100);
+			p.acceleration.y = new OneAttribute(100);
+			// 设置粒子的切向加速度
+			p.tangential.x = new RandomTwoAttribute(-100, 100);
+			p.tangential.y = new RandomTwoAttribute(-100, 100);
+			// 设置粒子的颜色，透明度渐出渐隐效果
+			p.colorAttribute.start = new FourAttribute(1, 1, 1, 0);
+			p.colorAttribute.tween.pushAttribute(10, new FourAttribute(1, 1, 1, 1));
+			p.colorAttribute.tween.pushAttribute(20, new FourAttribute(1, 1, 1, 1));
+			p.colorAttribute.tween.pushAttribute(80, new FourAttribute(1, 1, 1, 1));
+			p.colorAttribute.tween.pushAttribute(20, new FourAttribute(1, 1, 1, 0));
+			// 启动粒子系统
+			p.start();
+			this.addEventListener(MouseEvent.MOUSE_MOVE, (e:MouseEvent) -> {
+				p.x = e.stageX;
+				p.y = e.stageY;
+			});
+		});
+		assets.start();
+	}
+}

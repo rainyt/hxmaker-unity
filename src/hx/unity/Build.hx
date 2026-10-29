@@ -12,6 +12,8 @@ class Build {
 			Context.fatalError("Unity 和 OpenFL 后端不能同时启用", Context.currentPos());
 		for (feature in ["hxmaker_scene3d", "hxmaker_text_input", "hxmaker_filters", "hxmaker_advanced_blend", "hxmaker_custom_shader", "hxmaker_native_display", "hxmaker_bitmap_draw"])
 			if (Context.defined(feature)) Context.fatalError("Unity 首版尚未实现能力：" + feature, Context.currentPos());
+		// 在类型检查前修复第三方 Spine 的 C# 整数索引，不修改本机 Haxelib。
+		Compiler.addGlobalMetadata("spine.SkeletonJson", "@:build(hx.unity.SpineCompatibility.build())", false, true, false);
 		Compiler.define("hxmaker_unity");
 		Compiler.define("no-compilation");
 		Compiler.define("actuate_manual_update");

@@ -1,0 +1,51 @@
+package test;
+
+import hx.events.Event;
+import hx.display.TextFormat;
+import hx.assets.Assets;
+import hx.display.DisplayObject;
+import hx.display.Scene;
+import demo.SampleScene;
+import hx.display.Button;
+
+class ButtonRender extends SampleScene {
+	/**
+	 * 资源管理器
+	 */
+	var assets:Assets;
+
+	override function onStageInit():Void {
+		super.onStageInit();
+		assets = createAssets();
+		// 开始加载资源
+		assets.loadBitmapData("assets/logo.jpg");
+		for (i in 0...6) {
+			assets.loadBitmapData("assets/wabbit_alpha_" + (i + 1) + ".png");
+		}
+		assets.loadAtlas("assets/EmojAtlas.png", "assets/EmojAtlas.xml");
+		assets.onComplete((data) -> {
+			this.onLoaded();
+		}).onError(err -> {
+			trace("加载失败");
+		});
+		assets.start();
+	}
+
+	public function onLoaded():Void {
+		for (i in 0...100) {
+			var button:Button = new Button("测试文案", {
+				up: assets.bitmapDatas.get("logo")
+			});
+			button.textFormat = new TextFormat(null, 36, 0xff0000);
+			this.addChild(button);
+			button.clickEvent = () -> {
+				trace("点击事件");
+			}
+			button.x = Std.random(Std.int(stage.stageWidth));
+			button.y = Std.random(Std.int(stage.stageHeight));
+		}
+		this.addEventListener(Event.UPDATE, (e) -> {
+			this.getChildAt(this.children.length - 1).rotation += 1;
+		});
+	}
+}
